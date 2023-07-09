@@ -16,7 +16,7 @@ func (connection *Connection) Connect() error {
 	_, err := os.Stat(connection.statusDirectory())
 	if err != nil {
 		if errors.Is(err, os.ErrNotExist) {
-			err = os.Mkdir(connection.statusDirectory(), 0o600)
+			err = os.MkdirAll(connection.statusDirectory(), 0o700)
 			if err != nil {
 				return errors.Wrap(err, "failed to create status directory")
 			}
@@ -26,15 +26,18 @@ func (connection *Connection) Connect() error {
 	}
 
 	_, err = os.Stat(connection.pidPath())
-	if err != nil {
-		if errors.Is(err, os.ErrNotExist) {
-			err = os.Remove(connection.pidPath())
-			if err != nil {
-				return errors.Wrap(err, "failed to remove pid file")
-			}
-		} else {
-			return errors.Wrap(err, "failed to stat pid file")
+	if err == nil {
+		err = os.Remove(connection.pidPath())
+		if err != nil {
+			return errors.Wrap(err, "failed to remove pid file")
 		}
+	} else if !errors.Is(err, os.ErrNotExist) {
+		return errors.Wrap(err, "failed to stat pid file")
+	}
+
+	_, err = os.Create(connection.LogPath())
+	if err != nil {
+		return errors.Wrap(err, "failed to create log file")
 	}
 
 	temporaryDirectory, err := os.MkdirTemp("", "ovpn")
