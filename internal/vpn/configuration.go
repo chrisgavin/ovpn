@@ -14,7 +14,7 @@ type Configuration struct {
 }
 
 func LoadConfiguration() (*Configuration, error) {
-	configurationPath, err := xdg.SearchConfigFile("ovpn/configuration.yml") // TODO: yaml
+	configurationPath, err := xdg.SearchConfigFile("ovpn/configuration.yaml")
 	if err != nil {
 		return nil, err
 	}
