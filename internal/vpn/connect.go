@@ -103,7 +103,7 @@ func (connection *Connection) Connect() error {
 	command.Args = append(command.Args, "--log-append", connection.LogPath())
 	command.Args = append(command.Args, "--management", connection.controlSocketPath(), "unix")
 	command.Args = append(command.Args, "--writepid", connection.pidPath())
-	command.Args = append(command.Args, "--management-client-user", currentUser.Username+"F")
+	command.Args = append(command.Args, "--management-client-user", currentUser.Username)
 	command.Args = append(command.Args, "--management-client-group", currentGroup.Name)
 	command.Args = append(command.Args, "--daemon")
 
