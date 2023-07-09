@@ -48,7 +48,7 @@ func registerConnectCommand(rootCommand *RootCommand) {
 				return SilentErr
 			}
 
-			tailFile, err := tail.TailFile(connection.LogPath(), tail.Config{MustExist: true, Follow: true, Location: &tail.SeekInfo{Offset: 0, Whence: io.SeekEnd}})
+			tailFile, err := tail.TailFile(connection.LogPath(), tail.Config{Follow: true, Location: &tail.SeekInfo{Offset: 0, Whence: io.SeekEnd}})
 			if err != nil {
 				return err
 			}
