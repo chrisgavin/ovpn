@@ -71,7 +71,9 @@ func registerConnectCommand(rootCommand *RootCommand) {
 			for !finished {
 				select {
 				case line := <-tailFile.Lines:
-					fmt.Println(line.Text)
+					if line != nil {
+						fmt.Println(line.Text)
+					}
 				default:
 					running, err := connection.Running()
 					if err != nil {
