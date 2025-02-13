@@ -1,6 +1,1 @@
 project_name: ovpn
-
-builds:
-  - ldflags:
-      - -X github.com/chrisgavin/ovpn/internal/version.version={{.Version}}
-      - -X github.com/chrisgavin/ovpn/internal/version.commit={{.Commit}}
