@@ -8,7 +8,7 @@ require (
 	github.com/fatih/color v1.15.0
 	github.com/loynoir/ExpandUser.go v0.0.0-20210217142224-45967819e764
 	github.com/pkg/errors v0.9.1
-	github.com/spf13/cobra v1.7.0
+	github.com/spf13/cobra v1.8.1
 	go.uber.org/zap v1.24.0
 	gopkg.in/yaml.v3 v3.0.1
 )
