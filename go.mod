@@ -1,6 +1,6 @@
 module github.com/chrisgavin/ovpn
 
-go 1.20
+go 1.24.0
 
 require (
 	github.com/NordSecurity/gopenvpn v0.0.0-20230117114932-2252c52984b4
