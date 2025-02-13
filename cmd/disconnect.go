@@ -2,12 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"io"
 	"time"
 
+	"github.com/chrisgavin/ovpn/internal/tail"
 	"github.com/chrisgavin/ovpn/internal/vpn"
 	"github.com/fatih/color"
-	"github.com/nxadm/tail"
 	"github.com/spf13/cobra"
 )
 
@@ -48,7 +47,7 @@ func registerDisconnectCommand(rootCommand *RootCommand) {
 				return SilentErr
 			}
 
-			tailFile, err := tail.TailFile(connection.LogPath(), tail.Config{MustExist: true, Follow: true, Location: &tail.SeekInfo{Offset: 0, Whence: io.SeekEnd}})
+			tailFile, err := tail.TailFile(connection.LogPath(), tail.Options{NewLinesOnly: true})
 			if err != nil {
 				return err
 			}

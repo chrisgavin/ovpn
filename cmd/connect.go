@@ -2,12 +2,11 @@ package cmd
 
 import (
 	"fmt"
-	"io"
 	"time"
 
+	"github.com/chrisgavin/ovpn/internal/tail"
 	"github.com/chrisgavin/ovpn/internal/vpn"
 	"github.com/fatih/color"
-	"github.com/nxadm/tail"
 	"github.com/spf13/cobra"
 )
 
@@ -48,7 +47,7 @@ func registerConnectCommand(rootCommand *RootCommand) {
 				return SilentErr
 			}
 
-			tailFile, err := tail.TailFile(connection.LogPath(), tail.Config{Follow: true, Location: &tail.SeekInfo{Offset: 0, Whence: io.SeekEnd}})
+			tailFile, err := tail.TailFile(connection.LogPath(), tail.Options{NewLinesOnly: true, Truncate: true})
 			if err != nil {
 				return err
 			}
@@ -71,9 +70,10 @@ func registerConnectCommand(rootCommand *RootCommand) {
 			for !finished {
 				select {
 				case line := <-tailFile.Lines:
-					if line != nil {
-						fmt.Println(line.Text)
+					if line.Err != nil {
+						return line.Err
 					}
+					fmt.Println(line.Text)
 				default:
 					running, err := connection.Running()
 					if err != nil {

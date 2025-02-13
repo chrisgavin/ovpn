@@ -3,9 +3,9 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/chrisgavin/ovpn/internal/tail"
 	"github.com/chrisgavin/ovpn/internal/vpn"
 	"github.com/fatih/color"
-	"github.com/nxadm/tail"
 	"github.com/spf13/cobra"
 )
 
@@ -38,11 +38,14 @@ func registerLogsCommand(rootCommand *RootCommand) {
 				return SilentErr
 			}
 
-			tailFile, err := tail.TailFile(connection.LogPath(), tail.Config{MustExist: true, Follow: command.follow})
+			tailFile, err := tail.TailFile(connection.LogPath(), tail.Options{})
 			if err != nil {
 				return err
 			}
 			defer tailFile.Cleanup()
+			if !command.follow {
+				tailFile.StopAtEOF()
+			}
 
 			for line := range tailFile.Lines {
 				fmt.Println(line.Text)
