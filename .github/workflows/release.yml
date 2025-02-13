@@ -32,4 +32,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SNAPSHOT: ${{ (github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/')) && '--snapshot' || '' }}
         run: |
-          go tool goreleaser release "$SNAPSHOT"
+          go tool goreleaser release $SNAPSHOT
