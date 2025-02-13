@@ -26,7 +26,7 @@ type Status struct {
 func (connection *Connection) Status() (*Status, error) {
 	managementConnection, err := connection.managementConnection()
 	if err != nil {
-		if _, err := os.Stat(connection.controlSocketPath()); errors.Is(err, os.ErrNotExist) {
+		if _, err := os.Stat(connection.pidPath()); errors.Is(err, os.ErrNotExist) {
 			return &Status{State: StateDisconnected}, nil
 		}
 		return nil, err
@@ -35,7 +35,7 @@ func (connection *Connection) Status() (*Status, error) {
 
 	stateData, err := managementConnection.LatestState()
 	if err != nil {
-		if _, err := os.Stat(connection.controlSocketPath()); errors.Is(err, os.ErrNotExist) {
+		if _, err := os.Stat(connection.pidPath()); errors.Is(err, os.ErrNotExist) {
 			return &Status{State: StateDisconnected}, nil
 		}
 		return nil, errors.Wrap(err, "failed to get latest state")
