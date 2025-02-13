@@ -37,6 +37,9 @@ func (connection *Connection) Started() (bool, error) {
 func (connection *Connection) Running() (bool, error) {
 	processID, err := connection.processID()
 	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return false, nil
+		}
 		return false, err
 	}
 
