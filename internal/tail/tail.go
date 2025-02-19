@@ -29,7 +29,20 @@ type Options struct {
 }
 
 func TailFile(path string, options Options) (*Tailer, error) {
-	if options.Truncate {
+	_, err := os.Stat(path)
+	if err != nil && !errors.Is(err, os.ErrNotExist) {
+		return nil, errors.Wrap(err, "failed to stat file")
+	}
+	if errors.Is(err, os.ErrNotExist) {
+		file, err := os.Create(path)
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to create file")
+		}
+		err = file.Close()
+		if err != nil {
+			return nil, errors.Wrap(err, "failed to close file")
+		}
+	} else if options.Truncate {
 		err := os.Truncate(path, 0)
 		if err != nil {
 			return nil, errors.Wrap(err, "failed to truncate file")
