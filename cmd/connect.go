@@ -47,6 +47,11 @@ func registerConnectCommand(rootCommand *RootCommand) {
 				return SilentErr
 			}
 
+			err = connection.CreateStatusDirectory()
+			if err != nil {
+				return err
+			}
+
 			tailFile, err := tail.TailFile(connection.LogPath(), tail.Options{NewLinesOnly: true, Truncate: true})
 			if err != nil {
 				return err

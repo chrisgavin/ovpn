@@ -44,3 +44,18 @@ func (connection *Connection) managementConnection() (*openvpn.MgmtClient, error
 	}
 	return managementConnection, nil
 }
+
+func (connection *Connection) CreateStatusDirectory() error {
+	_, err := os.Stat(connection.statusDirectory())
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			err = os.MkdirAll(connection.statusDirectory(), 0o700)
+			if err != nil {
+				return errors.Wrap(err, "failed to create status directory")
+			}
+		} else {
+			return errors.Wrap(err, "failed to stat status directory")
+		}
+	}
+	return nil
+}
